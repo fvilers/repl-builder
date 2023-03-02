@@ -12,12 +12,8 @@ pub struct Repl {
 
 impl Repl {
     pub fn new(commands: Vec<Command>) -> Self {
-        // let commands: Vec<(String, Thunk)> = commands.iter().map(|c| (c.name, c.thunk)).collect();
-        let mut thunks = collections::HashMap::with_capacity(commands.len());
-
-        for command in commands {
-            thunks.insert(command.name, command.thunk);
-        }
+        let thunks =
+            collections::HashMap::from_iter(commands.iter().map(|c| (c.name.to_owned(), c.thunk)));
 
         Self { _thunks: thunks }
     }
