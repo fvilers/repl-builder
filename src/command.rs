@@ -1,4 +1,8 @@
-use crate::repl::Thunk;
+use std::result;
+
+use crate::{repl::Thunk, repl_error::ReplError};
+
+pub type CommandResult = result::Result<Option<String>, ReplError>;
 
 pub struct Command {
     pub(crate) name: String,

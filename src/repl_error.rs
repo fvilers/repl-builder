@@ -4,6 +4,7 @@ use std::{error, fmt, io};
 pub enum ReplError {
     Run,
     CommandNotFound,
+    MissingArgument(String),
     IO(io::Error),
 }
 
@@ -12,6 +13,7 @@ impl fmt::Display for ReplError {
         match self {
             ReplError::Run => write!(f, "Error while running the REPL"),
             ReplError::CommandNotFound => write!(f, "Command not found"),
+            ReplError::MissingArgument(name) => write!(f, "Missing argument `{}`", name),
             ReplError::IO(e) => e.fmt(f),
         }
     }
@@ -22,6 +24,7 @@ impl error::Error for ReplError {
         match *self {
             ReplError::Run => None,
             ReplError::CommandNotFound => None,
+            ReplError::MissingArgument(_) => None,
             ReplError::IO(ref e) => Some(e),
         }
     }

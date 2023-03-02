@@ -2,10 +2,12 @@ use std::{collections, result};
 
 use question::Question;
 
-use crate::{command::Command, repl_error::ReplError};
+use crate::{
+    command::{Command, CommandResult},
+    repl_error::ReplError,
+};
 
-pub type ThunkResult = result::Result<Option<String>, ReplError>;
-pub type Thunk = fn(args: Vec<&str>) -> ThunkResult;
+pub type Thunk = fn(args: Vec<&str>) -> CommandResult;
 
 pub struct Repl {
     thunks: collections::HashMap<String, Thunk>,
@@ -37,7 +39,7 @@ impl Repl {
         Ok(())
     }
 
-    fn execute_command(&self, name: &str, args: Vec<&str>) -> ThunkResult {
+    fn execute_command(&self, name: &str, args: Vec<&str>) -> CommandResult {
         match self.thunks.get(name) {
             Some(thunk) => thunk(args),
             _ => Err(ReplError::CommandNotFound),
