@@ -1,4 +1,5 @@
 mod command;
+mod prompt;
 mod repl;
 mod repl_builder;
 mod repl_error;

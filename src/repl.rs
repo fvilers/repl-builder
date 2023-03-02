@@ -1,4 +1,4 @@
-use std::{collections, result};
+use std::{collections, fmt, result};
 
 use question::Question;
 
@@ -11,21 +11,30 @@ pub type Thunk<Context> = fn(args: Vec<&str>, &mut Context) -> CommandResult;
 
 pub struct Repl<Context> {
     context: Context,
+    prompt: Box<dyn fmt::Display>,
     thunks: collections::HashMap<String, Thunk<Context>>,
 }
 
 impl<Context> Repl<Context> {
-    pub fn new(commands: Vec<Command<Context>>, context: Context) -> Self {
+    pub fn new(
+        commands: Vec<Command<Context>>,
+        context: Context,
+        prompt: Box<dyn fmt::Display>,
+    ) -> Self {
         let thunks =
             collections::HashMap::from_iter(commands.iter().map(|c| (c.name.to_owned(), c.thunk)));
 
-        Self { context, thunks }
+        Self {
+            context,
+            prompt,
+            thunks,
+        }
     }
 
     pub fn run(&mut self) -> result::Result<(), ReplError> {
         let mut question = Question::default();
 
-        while let Some(user_input) = question.ask("> ")? {
+        while let Some(user_input) = question.ask(self.prompt.to_string())? {
             let mut segments = user_input.split_whitespace();
 
             if let Some(name) = segments.next() {
