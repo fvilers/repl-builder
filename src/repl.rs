@@ -21,4 +21,8 @@ impl Repl {
 
         Self { _thunks: thunks }
     }
+
+    pub fn run(self) -> result::Result<(), ReplError> {
+        Err(ReplError::Run)
+    }
 }

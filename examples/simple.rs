@@ -1,3 +1,5 @@
+use std::process;
+
 use repl_builder::prelude::*;
 
 fn main() {
@@ -5,5 +7,8 @@ fn main() {
         .add_command(Command::new("hello", || Ok(Some(String::from("Hi!")))))
         .build();
 
-    println!("{:?}", repl);
+    if let Err(e) = repl.run() {
+        eprintln!("{}", e);
+        process::exit(1);
+    }
 }
