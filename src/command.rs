@@ -1,6 +1,5 @@
 use crate::repl::Thunk;
 
-#[derive(Debug)]
 pub struct Command {
     pub(crate) name: String,
     pub(crate) thunk: Thunk,

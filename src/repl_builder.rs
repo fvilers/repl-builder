@@ -1,6 +1,6 @@
 use crate::{command::Command, repl::Repl};
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ReplBuilder {
     commands: Vec<Command>,
 }
