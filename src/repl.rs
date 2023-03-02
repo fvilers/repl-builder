@@ -7,21 +7,22 @@ use crate::{
     repl_error::ReplError,
 };
 
-pub type Thunk = fn(args: Vec<&str>) -> CommandResult;
+pub type Thunk<Context> = fn(args: Vec<&str>, &mut Context) -> CommandResult;
 
-pub struct Repl {
-    thunks: collections::HashMap<String, Thunk>,
+pub struct Repl<Context> {
+    context: Context,
+    thunks: collections::HashMap<String, Thunk<Context>>,
 }
 
-impl Repl {
-    pub fn new(commands: Vec<Command>) -> Self {
+impl<Context> Repl<Context> {
+    pub fn new(commands: Vec<Command<Context>>, context: Context) -> Self {
         let thunks =
             collections::HashMap::from_iter(commands.iter().map(|c| (c.name.to_owned(), c.thunk)));
 
-        Self { thunks }
+        Self { context, thunks }
     }
 
-    pub fn run(self) -> result::Result<(), ReplError> {
+    pub fn run(&mut self) -> result::Result<(), ReplError> {
         let mut question = Question::default();
 
         while let Some(user_input) = question.ask("> ")? {
@@ -39,9 +40,9 @@ impl Repl {
         Ok(())
     }
 
-    fn execute_command(&self, name: &str, args: Vec<&str>) -> CommandResult {
+    fn execute_command(&mut self, name: &str, args: Vec<&str>) -> CommandResult {
         match self.thunks.get(name) {
-            Some(thunk) => thunk(args),
+            Some(thunk) => thunk(args, &mut self.context),
             _ => Err(ReplError::CommandNotFound),
         }
     }

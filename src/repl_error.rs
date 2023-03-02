@@ -5,6 +5,7 @@ pub enum ReplError {
     Run,
     CommandNotFound,
     MissingArgument(String),
+    Custom(String),
     IO(io::Error),
 }
 
@@ -14,6 +15,7 @@ impl fmt::Display for ReplError {
             ReplError::Run => write!(f, "Error while running the REPL"),
             ReplError::CommandNotFound => write!(f, "Command not found"),
             ReplError::MissingArgument(name) => write!(f, "Missing argument `{}`", name),
+            ReplError::Custom(msg) => write!(f, "{}", msg),
             ReplError::IO(e) => e.fmt(f),
         }
     }
@@ -25,6 +27,7 @@ impl error::Error for ReplError {
             ReplError::Run => None,
             ReplError::CommandNotFound => None,
             ReplError::MissingArgument(_) => None,
+            ReplError::Custom(_) => None,
             ReplError::IO(ref e) => Some(e),
         }
     }

@@ -3,8 +3,8 @@ use std::{error::Error, process};
 use repl_builder::prelude::*;
 
 fn main() {
-    let repl = ReplBuilder::default()
-        .add_command(Command::new("hi", |_| Ok(Some(String::from("Hi!")))))
+    let mut repl = ReplBuilder::default()
+        .add_command(Command::new("hi", |_, _| Ok(Some(String::from("Hi!")))))
         .add_command(Command::new("hello", hello))
         .build();
 
@@ -19,7 +19,7 @@ fn main() {
     }
 }
 
-fn hello(args: Vec<&str>) -> CommandResult {
+fn hello(args: Vec<&str>, _context: &mut ()) -> CommandResult {
     let Some(name) = args.first() else {
         return Err(ReplError::MissingArgument("name".into()));
     };
