@@ -2,7 +2,6 @@ use std::{error, fmt, io};
 
 #[derive(Debug)]
 pub enum ReplError {
-    Run,
     CommandNotFound,
     MissingArgument(String),
     Custom(String),
@@ -12,7 +11,6 @@ pub enum ReplError {
 impl fmt::Display for ReplError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            ReplError::Run => write!(f, "Error while running the REPL"),
             ReplError::CommandNotFound => write!(f, "Command not found"),
             ReplError::MissingArgument(name) => write!(f, "Missing argument `{}`", name),
             ReplError::Custom(msg) => write!(f, "{}", msg),
@@ -24,7 +22,6 @@ impl fmt::Display for ReplError {
 impl error::Error for ReplError {
     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         match *self {
-            ReplError::Run => None,
             ReplError::CommandNotFound => None,
             ReplError::MissingArgument(_) => None,
             ReplError::Custom(_) => None,
