@@ -13,5 +13,7 @@ keywords = ["repl", "repl-builder"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-colored = "2.0.0"
 question = { git = "https://github.com/fvilers/question" }
+
+[dev-dependencies]
+colored = "2.0.0"
