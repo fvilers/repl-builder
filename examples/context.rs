@@ -29,7 +29,7 @@ fn main() {
 
 fn inc(_args: Vec<&str>, context: &mut State) -> CommandResult {
     if context.count.checked_add(1).is_none() {
-        return Err(ReplError::Custom("Overflow while incrementing".into()));
+        return Err(ReplError::Execution("Overflow while incrementing".into()));
     }
 
     Ok(None)
@@ -37,7 +37,7 @@ fn inc(_args: Vec<&str>, context: &mut State) -> CommandResult {
 
 fn dec(_args: Vec<&str>, context: &mut State) -> CommandResult {
     if context.count.checked_sub(1).is_none() {
-        return Err(ReplError::Custom("Overflow while decrementing".into()));
+        return Err(ReplError::Execution("Overflow while decrementing".into()));
     }
 
     Ok(None)
